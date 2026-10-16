@@ -1,0 +1,216 @@
+@import "@fontsource-variable/bricolage-grotesque/opsz.css";
+@import "@fontsource-variable/source-serif-4/opsz.css";
+@import "@fontsource-variable/source-serif-4/opsz-italic.css";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Extra breakpoints for large monitors */
+  --breakpoint-xs: 33.75rem; /* 540px — large phones in landscape */
+  --breakpoint-3xl: 112.5rem; /* 1800px */
+  --breakpoint-4xl: 150rem; /* 2400px */
+
+  --font-sans: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+
+  /* Warm "pet magazine" palette */
+  --color-ink: #1f2a2e;
+  --color-ink-soft: #3b4548;
+  --color-muted: #6b6359;
+  --color-line: #e9dfd1;
+  --color-fog: #f4ede2;
+  --color-cream: #fbf6ee;
+  --color-paper: #ffffff;
+  --color-collar: #c2410c; /* text-safe coral */
+  --color-collar-dark: #9a3412;
+  --color-coral: #f26b3a; /* decorative coral (shapes, not small text) */
+  --color-ball: #ffc845; /* sunflower */
+  --color-ball-dark: #f5b521;
+  --color-sage: #dcebd9;
+  --color-sky: #dbeaf7;
+  --color-alert: #c2410c;
+  --color-ok: #15803d;
+
+  /* category tints (cover placeholders) */
+  --color-tint-1: #fde4d3;
+  --color-tint-2: #e6e0f8;
+  --color-tint-3: #dcebd9;
+  --color-tint-4: #fff0c7;
+  --color-tint-5: #fbdde3;
+  --color-tint-6: #dbeaf7;
+  --color-tint-7: #e8efcf;
+  --color-tint-8: #f6e2cf;
+
+  --shadow-card: 0 1px 2px rgb(31 42 46 / 0.04), 0 8px 24px -12px rgb(31 42 46 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(31 42 46 / 0.05), 0 24px 48px -20px rgb(31 42 46 / 0.35);
+
+  --animate-float: float 6s ease-in-out infinite;
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-8px) rotate(var(--r, 0deg)); }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  /* Large monitors: scale the whole type/spacing system up a touch so pages don't look tiny */
+  @media (min-width: 1800px) {
+    html { font-size: 106.25%; }
+  }
+  @media (min-width: 2400px) {
+    html { font-size: 118.75%; }
+  }
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-optical-sizing: auto;
+  }
+  ::selection {
+    background: var(--color-ball);
+    color: var(--color-ink);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-collar);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1200px] px-4 sm:px-6 lg:px-8 2xl:max-w-[1400px] 3xl:max-w-[1560px] 4xl:max-w-[1880px];
+  }
+
+  /* Small uppercase label above section titles */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold tracking-[0.14em] text-collar uppercase;
+  }
+  .section-title {
+    @apply text-[1.9rem] leading-[1.05] font-extrabold tracking-[-0.025em] text-balance sm:text-4xl lg:text-[2.75rem];
+  }
+  .card {
+    @apply rounded-3xl bg-paper shadow-card ring-1 ring-line/60;
+  }
+
+  /* The signature: categories as pet ID tags — a rounded tag with a punched ring hole. */
+  .id-tag {
+    @apply relative inline-flex items-center gap-2 rounded-full bg-ball py-1.5 pr-3.5 pl-7 text-sm font-semibold text-ink transition-colors;
+  }
+  .id-tag::before {
+    content: "";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    transform: translateY(-50%);
+    background: var(--color-paper);
+    box-shadow: inset 0 0 0 2px var(--color-ink);
+  }
+  a.id-tag:hover { @apply bg-ball-dark; }
+  .id-tag-ghost {
+    @apply bg-fog;
+  }
+  a.id-tag-ghost:hover { @apply bg-line; }
+
+  /* Topic chip: white pill that turns sunflower on hover */
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full bg-paper px-3.5 py-2 text-sm font-semibold text-ink ring-1 ring-line transition-all hover:-translate-y-0.5 hover:bg-ball hover:ring-ball-dark;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  .btn-primary { @apply bg-collar text-white hover:bg-collar-dark; }
+  .btn-lg { @apply px-6 py-3.5 text-base; }
+  .btn-ink { @apply bg-ink text-white hover:bg-ink-soft; }
+  .btn-ball { @apply bg-ball text-ink hover:bg-ball-dark; }
+  .btn-ghost { @apply border border-line bg-paper text-ink hover:bg-fog; }
+  .btn-danger { @apply bg-alert text-white hover:opacity-90; }
+
+  .input {
+    @apply w-full rounded-xl border border-line bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted/70 focus:border-collar focus:ring-2 focus:ring-collar/20 focus:outline-none;
+  }
+  .label { @apply mb-1.5 block text-sm font-semibold text-ink; }
+  .hint { @apply mt-1 text-xs text-muted; }
+
+}
+
+/* Unlayered so these win over the typography plugin's utilities layer */
+
+.article-body {
+  @apply font-serif;
+  --tw-prose-body: var(--color-ink-soft);
+  --tw-prose-headings: var(--color-ink);
+  --tw-prose-links: var(--color-collar);
+  --tw-prose-bold: var(--color-ink);
+  --tw-prose-quotes: var(--color-ink);
+  --tw-prose-quote-borders: var(--color-ball-dark);
+  --tw-prose-bullets: var(--color-collar);
+  --tw-prose-counters: var(--color-collar);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+  line-height: 1.75;
+}
+.article-body :where(h2, h3, h4) {
+  @apply font-sans tracking-tight;
+  scroll-margin-top: 6rem;
+}
+.article-body :where(h2) { @apply mt-14 text-[1.7rem] font-extrabold; }
+.article-body :where(h2)::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 0.3rem;
+  margin-bottom: 0.9rem;
+  border-radius: 999px;
+  background: var(--color-ball);
+}
+/* Magazine-style drop cap on the opening paragraph */
+.article-body > p:first-of-type::first-letter {
+  float: left;
+  margin: 0.1em 0.16em 0 0;
+  padding: 0.12em 0.2em 0.06em;
+  border-radius: 0.18em;
+  background: var(--color-ball);
+  font-family: var(--font-sans);
+  font-size: 3.1em;
+  font-weight: 800;
+  line-height: 0.82;
+  color: var(--color-ink);
+}
+.article-body :where(h3) { @apply text-xl font-semibold; }
+.article-body :where(blockquote) {
+  @apply rounded-2xl border-l-4 border-ball bg-paper px-6 py-1 not-italic shadow-card;
+  font-style: normal;
+}
+.article-body :where(blockquote p)::before,
+.article-body :where(blockquote p)::after { content: none; }
+.article-body :where(img) { @apply rounded-2xl; }
+.article-body :where(table) { @apply font-sans text-base; }
+.article-body :where(thead th) { @apply bg-fog px-3 py-2; }
+.article-body :where(td) { @apply px-3; }
+/* Small screens: compact tables (and let wide ones scroll instead of squashing) */
+@media (max-width: 639px) {
+  .article-body :where(table) { display: block; overflow-x: auto; font-size: 0.875rem; -webkit-overflow-scrolling: touch; }
+  .article-body :where(thead th) { padding: 0.5rem; }
+  .article-body :where(td) { padding-left: 0.5rem; padding-right: 0.5rem; }
+}
+.article-body :where(a) { @apply underline decoration-collar/40 underline-offset-2 hover:decoration-collar; }
+.article-body :where(iframe) { @apply aspect-video h-auto w-full rounded-2xl; }
+
+/* Admin editor surface mirrors the article styles */
+.editor-surface .ProseMirror {
+  @apply min-h-[420px] px-5 py-4 outline-none;
+}
+.editor-surface .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-muted/60;
+}
